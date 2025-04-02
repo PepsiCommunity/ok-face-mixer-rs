@@ -21,24 +21,28 @@ pub enum SmileType {
 
 impl Display for SmileType {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", match self {
-            Self::Grin => "grin",
-            Self::Angry => "angry",
-            Self::Flush => "flush",
-            Self::He => "he",
-            Self::Mad => "mad",
-            Self::Plead => "plead",
-            Self::Sad => "sad",
-            Self::Sg => "sg",
-            Self::Shock => "shock",
-            Self::SlSmile => "sl_smile",
-            Self::Sleep => "sleep",
-            Self::Smiley => "smiley",
-            Self::Tong => "tong",
-            Self::Unamus => "unamus",
-            Self::Wink => "wink",
-            Self::Zany => "zany",
-        })
+        write!(
+            f,
+            "{}",
+            match self {
+                Self::Grin => "grin",
+                Self::Angry => "angry",
+                Self::Flush => "flush",
+                Self::He => "he",
+                Self::Mad => "mad",
+                Self::Plead => "plead",
+                Self::Sad => "sad",
+                Self::Sg => "sg",
+                Self::Shock => "shock",
+                Self::SlSmile => "sl_smile",
+                Self::Sleep => "sleep",
+                Self::Smiley => "smiley",
+                Self::Tong => "tong",
+                Self::Unamus => "unamus",
+                Self::Wink => "wink",
+                Self::Zany => "zany",
+            }
+        )
     }
 }
 
@@ -64,7 +68,7 @@ impl FromStr for SmileType {
             "wink" => Ok(Self::Wink),
             "zany" => Ok(Self::Zany),
 
-            _ => Err(())
+            _ => Err(()),
         }
     }
 }
