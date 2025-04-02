@@ -6,10 +6,8 @@ use std::{
 use actix_web::{App, HttpResponse, HttpServer, Responder, get, web};
 use image::ImageFormat;
 use log::{debug, error};
+use ok_face_mixer_core::{Smile, SmileType};
 use serde_derive::Deserialize;
-use smile::Smile;
-
-mod smile;
 
 #[derive(Deserialize, Debug)]
 struct Info {
@@ -26,8 +24,8 @@ struct Info {
 async fn root(req: web::Query<Info>) -> impl Responder {
     debug!("processing smile: {:?}", req.0);
 
-    let left = Smile::from_str(&req.left);
-    let right = Smile::from_str(&req.right);
+    let left = SmileType::from_str(&req.left);
+    let right = SmileType::from_str(&req.right);
 
     if left
         .as_ref()
@@ -43,8 +41,7 @@ async fn root(req: web::Query<Info>) -> impl Responder {
 
     let (left, right) = (left.unwrap(), right.unwrap());
 
-    let res = Smile::combine(left, right);
-    let res = res.image();
+    let res = Smile::new(left, right).generate();
 
     debug!("writing image to gif bytes");
     let mut bytes: Vec<u8> = Vec::new();

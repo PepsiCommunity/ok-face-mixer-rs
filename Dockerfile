@@ -13,4 +13,3 @@ RUN chmod +x /app/ok-face-mixer-rs
 
 EXPOSE 8000
 CMD ["/app/ok-face-mixer-rs"]
-

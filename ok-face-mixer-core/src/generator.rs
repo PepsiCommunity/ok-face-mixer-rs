@@ -1,21 +1,29 @@
-use std::str::FromStr;
-
 use image::{ColorType, DynamicImage, GenericImage, GenericImageView, ImageReader};
 use lazy_static::lazy_static;
 use log::debug;
+
+use crate::{Smile, SmileType};
 
 pub struct SmileElement {
     image: DynamicImage,
     pos: (usize, usize),
 }
 
-pub type OptionalSmileElement = Option<&'static SmileElement>;
+impl SmileElement {
+    pub fn new(image_name: &str, pos: (usize, usize)) -> Self {
+        debug!("loading image {}", image_name);
 
-pub struct Smile {
-    brow: OptionalSmileElement,
-    eye: OptionalSmileElement,
-    mouth: OptionalSmileElement,
+        Self {
+            image: ImageReader::open(image_name)
+                .expect("image reading error")
+                .decode()
+                .expect("image format error"),
+            pos,
+        }
+    }
 }
+
+pub type OptionalSmileElement = Option<&'static SmileElement>;
 
 lazy_static! {
     pub static ref BACKGROUND: SmileElement = SmileElement::new("res/background.png", (0, 0));
@@ -74,115 +82,77 @@ pub const SMILE_WIDTH: u32 = 64;
 pub const SMILE_HEIGHT: u32 = 64;
 
 impl Smile {
-    #[inline]
-    pub fn new(
-        brow: OptionalSmileElement,
-        eye: OptionalSmileElement,
-        mouth: OptionalSmileElement,
-    ) -> Self {
-        Self { brow, eye, mouth }
-    }
-
-    #[inline]
-    pub fn grin() -> Self {
-        Self::new(None, Some(&GRIN_EYES), Some(&GRIN_MOUTH))
-    }
-
-    #[inline]
-    pub fn angry() -> Self {
-        Self::new(None, Some(&ANGRY_EYES), Some(&ANGRY_MOUTH))
-    }
-
-    #[inline]
-    pub fn flush() -> Self {
-        Self::new(Some(&FLUSH_BROWS), Some(&FLUSH_EYES), Some(&FLUSH_MOUTH))
-    }
-
-    #[inline]
-    pub fn he() -> Self {
-        Self::new(Some(&HE_BROWS), Some(&HE_EYES), Some(&HE_MOUTH))
-    }
-
-    #[inline]
-    pub fn mad() -> Self {
-        Self::new(Some(&MAD_BROWS), Some(&MAD_EYES), Some(&MAD_MOUTH))
-    }
-
-    #[inline]
-    pub fn plead() -> Self {
-        Self::new(Some(&PLEAD_BROWS), Some(&PLEAD_EYES), Some(&PLEAD_MOUTH))
-    }
-
-    #[inline]
-    pub fn sad() -> Self {
-        Self::new(Some(&SAD_BROWS), Some(&SAD_EYES), Some(&SAD_MOUTH))
-    }
-
-    #[inline]
-    pub fn sg() -> Self {
-        Self::new(Some(&SG_BROWS), Some(&SG_EYES), Some(&SG_MOUTH))
-    }
-
-    #[inline]
-    pub fn shock() -> Self {
-        Self::new(Some(&SHOCK_BROWS), Some(&SHOCK_EYES), Some(&SHOCK_MOUTH))
-    }
-
-    #[inline]
-    pub fn sl_smile() -> Self {
-        Self::new(
-            Some(&SL_SMILE_BROWS),
-            Some(&SL_SMILE_EYES),
-            Some(&SL_SMILE_MOUTH),
-        )
-    }
-
-    #[inline]
-    pub fn sleep() -> Self {
-        Self::new(Some(&SLEEP_BROWS), Some(&SLEEP_EYES), Some(&SLEEP_MOUTH))
-    }
-
-    #[inline]
-    pub fn smiley() -> Self {
-        Self::new(Some(&SMILEY_BROWS), Some(&SMILEY_EYES), Some(&SMILEY_MOUTH))
-    }
-
-    #[inline]
-    pub fn tong() -> Self {
-        Self::new(Some(&TONG_BROWS), Some(&TONG_EYES), Some(&TONG_MOUTH))
-    }
-
-    #[inline]
-    pub fn unamus() -> Self {
-        Self::new(Some(&UNAMUS_BROWS), Some(&UNAMUS_EYES), Some(&UNAMUS_MOUTH))
-    }
-
-    #[inline]
-    pub fn wink() -> Self {
-        Self::new(Some(&WINK_BROWS), Some(&WINK_EYES), Some(&WINK_MOUTH))
-    }
-
-    #[inline]
-    pub fn zany() -> Self {
-        Self::new(Some(&ZANY_BROWS), Some(&ZANY_EYES), Some(&ZANY_MOUTH))
-    }
-
-    #[inline]
-    pub fn combine(left: Self, right: Self) -> Self {
-        Self::new(left.brow, left.eye, right.mouth)
-    }
-
-    pub fn image(&self) -> DynamicImage {
+    pub fn generate(&self) -> DynamicImage {
         debug!("generating image...");
 
+        let (brows, eyes, mouth) = self.get_parts();
         let mut image = DynamicImage::new(SMILE_WIDTH, SMILE_HEIGHT, ColorType::Rgb8);
 
         Self::add_element(&mut image, &Some(&BACKGROUND));
-        Self::add_element(&mut image, &self.brow);
-        Self::add_element(&mut image, &self.eye);
-        Self::add_element(&mut image, &self.mouth);
+        Self::add_element(&mut image, &brows);
+        Self::add_element(&mut image, &eyes);
+        Self::add_element(&mut image, &mouth);
 
         image
+    }
+
+    pub fn get_parts(&self) -> (OptionalSmileElement, OptionalSmileElement, OptionalSmileElement) {
+        (
+        match self.left {
+            SmileType::Grin => None,
+            SmileType::Angry => None,
+            SmileType::Flush => Some(&FLUSH_BROWS),
+            SmileType::He => Some(&HE_BROWS),
+            SmileType::Mad => Some(&MAD_BROWS),
+            SmileType::Plead => Some(&PLEAD_BROWS),
+            SmileType::Sad => Some(&SAD_BROWS),
+            SmileType::Sg => Some(&SG_BROWS),
+            SmileType::Shock => Some(&SHOCK_BROWS),
+            SmileType::SlSmile => Some(&SL_SMILE_BROWS),
+            SmileType::Sleep => Some(&SLEEP_BROWS),
+            SmileType::Smiley => Some(&SMILEY_BROWS),
+            SmileType::Tong => Some(&TONG_BROWS),
+            SmileType::Unamus => Some(&UNAMUS_BROWS),
+            SmileType::Wink => Some(&WINK_BROWS),
+            SmileType::Zany => Some(&ZANY_BROWS),
+        },
+        match self.left {
+            SmileType::Grin => Some(&GRIN_EYES),
+            SmileType::Angry => Some(&ANGRY_EYES),
+            SmileType::Flush => Some(&FLUSH_EYES),
+            SmileType::He => Some(&HE_EYES),
+            SmileType::Mad => Some(&MAD_EYES),
+            SmileType::Plead => Some(&PLEAD_EYES),
+            SmileType::Sad => Some(&SAD_EYES),
+            SmileType::Sg => Some(&SG_EYES),
+            SmileType::Shock => Some(&SHOCK_EYES),
+            SmileType::SlSmile => Some(&SL_SMILE_EYES),
+            SmileType::Sleep => Some(&SLEEP_EYES),
+            SmileType::Smiley => Some(&SMILEY_EYES),
+            SmileType::Tong => Some(&TONG_EYES),
+            SmileType::Unamus => Some(&UNAMUS_EYES),
+            SmileType::Wink => Some(&WINK_EYES),
+            SmileType::Zany => Some(&ZANY_EYES),
+        },
+        match self.right {
+            SmileType::Grin => Some(&GRIN_MOUTH),
+            SmileType::Angry => Some(&ANGRY_MOUTH),
+            SmileType::Flush => Some(&FLUSH_MOUTH),
+            SmileType::He => Some(&HE_MOUTH),
+            SmileType::Mad => Some(&MAD_MOUTH),
+            SmileType::Plead => Some(&PLEAD_MOUTH),
+            SmileType::Sad => Some(&SAD_MOUTH),
+            SmileType::Sg => Some(&SG_MOUTH),
+            SmileType::Shock => Some(&SHOCK_MOUTH),
+            SmileType::SlSmile => Some(&SL_SMILE_MOUTH),
+            SmileType::Sleep => Some(&SLEEP_MOUTH),
+            SmileType::Smiley => Some(&SMILEY_MOUTH),
+            SmileType::Tong => Some(&TONG_MOUTH),
+            SmileType::Unamus => Some(&UNAMUS_MOUTH),
+            SmileType::Wink => Some(&WINK_MOUTH),
+            SmileType::Zany => Some(&ZANY_MOUTH),
+        }
+        )
     }
 
     fn add_element(img: &mut DynamicImage, el: &OptionalSmileElement) {
@@ -211,51 +181,6 @@ impl Smile {
                     },
                 )
             });
-        }
-    }
-
-    fn from_str_real(s: &str) -> Result<Self, ()> {
-        match s {
-            "grin" => Ok(Self::grin()),
-            "angry" => Ok(Self::angry()),
-            "flush" => Ok(Self::flush()),
-            "he" => Ok(Self::he()),
-            "mad" => Ok(Self::mad()),
-            "plead" => Ok(Self::plead()),
-            "sad" => Ok(Self::sad()),
-            "sg" => Ok(Self::sg()),
-            "shock" => Ok(Self::shock()),
-            "sl_smile" => Ok(Self::sl_smile()),
-            "sleep" => Ok(Self::sleep()),
-            "smiley" => Ok(Self::smiley()),
-            "tong" => Ok(Self::tong()),
-            "unamus" => Ok(Self::unamus()),
-            "wink" => Ok(Self::wink()),
-            "zany" => Ok(Self::zany()),
-
-            _ => Err(()),
-        }
-    }
-}
-
-impl FromStr for Smile {
-    type Err = ();
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_str_real(s.replace("/json/", "").replace(".json", "").as_str())
-    }
-}
-
-impl SmileElement {
-    pub fn new(image_name: &str, pos: (usize, usize)) -> Self {
-        debug!("loading image {}", image_name);
-
-        Self {
-            image: ImageReader::open(image_name)
-                .expect("image reading error")
-                .decode()
-                .expect("image format error"),
-            pos,
         }
     }
 }
