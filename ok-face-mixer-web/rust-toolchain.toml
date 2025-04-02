@@ -1,0 +1,3 @@
+[toolchain]
+chanel = "stable"
+targets = ["wasm32-unknown-unknown"]

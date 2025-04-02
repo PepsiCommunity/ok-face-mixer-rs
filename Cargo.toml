@@ -1,3 +1,3 @@
 [workspace]
 resolver = "2"
-members = [ "ok-face-mixer-api","ok-face-mixer-core"]
+members = [ "ok-face-mixer-api","ok-face-mixer-core", "ok-face-mixer-web"]
