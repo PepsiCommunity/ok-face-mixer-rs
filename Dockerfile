@@ -8,8 +8,8 @@ FROM debian:bookworm-slim
 WORKDIR /app
 
 COPY --from=builder /app/res /app/res
-COPY --from=builder /app/target/release/ok-face-mixer-rs /app/ok-face-mixer-rs
-RUN chmod +x /app/ok-face-mixer-rs
+COPY --from=builder /app/target/release/ok-face-mixer-api /app/ok-face-mixer-api
+RUN chmod +x /app/ok-face-mixer-api
 
 EXPOSE 8000
-CMD ["/app/ok-face-mixer-rs"]
+CMD ["/app/ok-face-mixer-api"]
