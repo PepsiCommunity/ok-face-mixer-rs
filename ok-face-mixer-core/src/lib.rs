@@ -51,7 +51,7 @@ impl FromStr for SmileType {
     type Err = ();
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s.replace("/api/json/", "").replace(".json", "").as_str() {
+        match s.replace("/json/", "").replace(".json", "").as_str() {
             "grin" => Ok(Self::Grin),
             "angry" => Ok(Self::Angry),
             "flush" => Ok(Self::Flush),
