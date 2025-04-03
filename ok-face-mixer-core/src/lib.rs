@@ -1,5 +1,6 @@
 use std::{fmt::Display, str::FromStr};
 
+#[derive(Debug, PartialEq, Eq)]
 pub enum SmileType {
     Grin,
     Angry,
@@ -50,7 +51,7 @@ impl FromStr for SmileType {
     type Err = ();
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s.replace("/json/", "").replace(".json", "").as_str() {
+        match s.replace("/api/json/", "").replace(".json", "").as_str() {
             "grin" => Ok(Self::Grin),
             "angry" => Ok(Self::Angry),
             "flush" => Ok(Self::Flush),
@@ -84,7 +85,7 @@ impl Smile {
     }
 }
 
-#[cfg(feature = "query")]
+#[cfg(any(feature = "query", test))]
 impl Smile {
     pub fn api_query(&self) -> String {
         format!("?left={}&right={}", self.left, self.right)
@@ -93,3 +94,30 @@ impl Smile {
 
 #[cfg(feature = "generator")]
 mod generator;
+
+#[cfg(test)]
+mod tests {
+    use std::str::FromStr;
+
+    use crate::{Smile, SmileType};
+
+    #[test]
+    fn to_str_test() {
+        assert_eq!("grin", SmileType::Grin.to_string());
+        assert_eq!("angry", SmileType::Angry.to_string());
+        assert_eq!("he", SmileType::He.to_string());
+    }
+
+    #[test]
+    fn from_str_test() {
+        assert_eq!(SmileType::Grin, SmileType::from_str("grin").unwrap());
+        assert_eq!(SmileType::Grin, SmileType::from_str("/api/json/grin.json").unwrap());
+        assert_eq!(SmileType::Zany, SmileType::from_str("zany").unwrap());
+        assert_eq!(SmileType::Zany, SmileType::from_str("/api/json/zany.json").unwrap());
+    }
+
+    #[test]
+    fn api_query_test() {
+        assert_eq!("?left=grin&right=angry", Smile::new(SmileType::Grin, SmileType::Angry).api_query());
+    }
+}
