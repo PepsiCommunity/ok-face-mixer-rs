@@ -111,13 +111,22 @@ mod tests {
     #[test]
     fn from_str_test() {
         assert_eq!(SmileType::Grin, SmileType::from_str("grin").unwrap());
-        assert_eq!(SmileType::Grin, SmileType::from_str("/api/json/grin.json").unwrap());
+        assert_eq!(
+            SmileType::Grin,
+            SmileType::from_str("/api/json/grin.json").unwrap()
+        );
         assert_eq!(SmileType::Zany, SmileType::from_str("zany").unwrap());
-        assert_eq!(SmileType::Zany, SmileType::from_str("/api/json/zany.json").unwrap());
+        assert_eq!(
+            SmileType::Zany,
+            SmileType::from_str("/api/json/zany.json").unwrap()
+        );
     }
 
     #[test]
     fn api_query_test() {
-        assert_eq!("?left=grin&right=angry", Smile::new(SmileType::Grin, SmileType::Angry).api_query());
+        assert_eq!(
+            "?left=grin&right=angry",
+            Smile::new(SmileType::Grin, SmileType::Angry).api_query()
+        );
     }
 }

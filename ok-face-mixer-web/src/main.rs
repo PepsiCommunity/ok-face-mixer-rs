@@ -3,7 +3,7 @@ use std::str::FromStr;
 use leptos::prelude::*;
 use log::info;
 use ok_face_mixer_core::{Smile, SmileType};
-use stylers::style;
+use stylers::style_sheet;
 
 const API_PATH: &str = "https://mix.andcool.ru/api/mix_image.gif";
 
@@ -14,71 +14,12 @@ fn app() -> impl IntoView {
     let (left_smile, set_left_smile) = signal(SmileType::Grin);
     let (right_smile, set_right_smile) = signal(SmileType::Grin);
 
-    let style = style! { "app",
-    body {
-        background: #151517;
-        margin: 0;
-        color: white;
-        font-family: Inter, sans-serif;
-        text-align: center;
-        padding: 1rem;
-
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 1rem;
-    }
-
-    input,
-    select {
-        padding: .5rem;
-        border-radius: 10px;
-        outline: none;
-        border: none;
-        background-color: #1E1E20;
-        border: 1px #1E1E20 solid;
-        color: inherit;
-        width: 15rem;
-        box-sizing: border-box;
-        transition: border .25s;
-        height: 2.4rem;
-    }
-
-    input:focus,
-    select:focus {
-        border: 1px #666666 solid;
-    }
-
-    button {
-        padding: .8rem;
-        border-radius: 10px;
-        border: none;
-        background-color: #1E1E20;
-        transition: background-color .2s;
-        color: white;
-        cursor: pointer;
-        white-space: nowrap;
-        width: 15rem;
-        box-sizing: border-box;
-    }
-
-    button:hover {
-        background-color: #37373b;
-    }
-
-    #url {
-        border-radius: 10px;
-        background-color: #1E1E20;
-        border: 1px #313131 solid;
-        font-size: .9rem;
-        padding: .5rem;
-    }
-    };
+    let style = style_sheet!("ok-face-mixer-web/styles.css");
 
     let smile_selector = move |set_smile: WriteSignal<SmileType>| {
         info!("rendering smile selector");
 
-        view! {
+        view! { class = style,
             <label>"Top"</label>
             <select
                 on:change:target = move |e| {
