@@ -113,12 +113,12 @@ mod tests {
         assert_eq!(SmileType::Grin, SmileType::from_str("grin").unwrap());
         assert_eq!(
             SmileType::Grin,
-            SmileType::from_str("/api/json/grin.json").unwrap()
+            SmileType::from_str("/json/grin.json").unwrap()
         );
         assert_eq!(SmileType::Zany, SmileType::from_str("zany").unwrap());
         assert_eq!(
             SmileType::Zany,
-            SmileType::from_str("/api/json/zany.json").unwrap()
+            SmileType::from_str("/json/zany.json").unwrap()
         );
     }
 
