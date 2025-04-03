@@ -4,7 +4,10 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+ok-face-mixer-core = { path = "../ok-face-mixer-core", features = ["query"] }
+
 console_error_panic_hook = "0.1.7"
 console_log = "1.0.0"
 leptos = { version = "0.7.8", features = ["csr"] }
 log = "0.4.27"
+stylers = "0.3.2"
