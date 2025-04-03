@@ -65,8 +65,12 @@ async fn main() -> io::Result<()> {
 
     debug!("running server");
 
-    HttpServer::new(|| App::new().service(root))
-        .bind("0.0.0.0:8000")?
-        .run()
-        .await
+    HttpServer::new(|| {
+        App::new().service(root).service(
+            actix_files::Files::new("/", "./ok-face-mixer-web/dist").index_file("index.html"),
+        )
+    })
+    .bind("0.0.0.0:8000")?
+    .run()
+    .await
 }
