@@ -13,11 +13,6 @@ use serde_derive::Deserialize;
 struct Info {
     left: String,
     right: String,
-
-    #[allow(dead_code)]
-    left_type: Option<String>,
-    #[allow(dead_code)]
-    right_type: Option<String>,
 }
 
 #[get("/api/mix_image.gif")]
