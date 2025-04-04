@@ -31,10 +31,6 @@ fn app() -> impl IntoView {
             >
                 {SmileType::iter().map(|x| view! {<option value=x.to_string()>{x.to_string().as_str().to_pascal_case()}</option>}).collect::<Vec<_>>()}
             </select>
-
-            <button on:click = move |_| {
-                set_smile.set(rand::random());
-            }>"Random smiles"</button>
         }
     };
 
@@ -54,6 +50,11 @@ fn app() -> impl IntoView {
 
         <label>"Bottom"</label>
         {smile_selector(set_right_smile)}
+
+        <button on:click = move |_| {
+            set_left_smile.set(rand::random());
+            set_right_smile.set(rand::random());
+        }>"Randomize smile"</button>
 
         <img src = api_path/>
 
