@@ -6,6 +6,9 @@ RUN cargo install trunk
 COPY . .
 RUN cargo build --bin ok-face-mixer-api --release
 
+WORKDIR ./ok-face-mixer-web
+RUN trunk build --release
+
 FROM debian:bookworm-slim
 WORKDIR /app
 
