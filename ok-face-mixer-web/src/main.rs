@@ -4,6 +4,7 @@ use leptos::prelude::*;
 use log::info;
 use ok_face_mixer_core::{Smile, SmileType};
 use stylers::style_sheet;
+use wasm_bindgen_futures::JsFuture;
 
 const API_PATH: &str = "https://mix.andcool.ru/api/mix_image.gif";
 
@@ -20,7 +21,6 @@ fn app() -> impl IntoView {
         info!("rendering smile selector");
 
         view! { class = style,
-            <label>"Top"</label>
             <select
                 on:change:target = move |e| {
                     info!("target changed to {}", e.target().value());
@@ -56,13 +56,21 @@ fn app() -> impl IntoView {
     view! { class = style,
         <h1>"OK Emoji Mixer"</h1>
 
+        <label>"Top"</label>
         {smile_selector(set_left_smile)}
+
+        <label>"Bottom"</label>
         {smile_selector(set_right_smile)}
 
         <img src = api_path/>
 
         <div>
             <p id="url">{api_path}</p>
+
+            <button on:click = move |_| wasm_bindgen_futures::spawn_local(async move {
+                info!("copying \"{}\" to clipboard", api_path());
+                JsFuture::from(web_sys::window().expect("get window").navigator().clipboard().write_text(&api_path())).await.expect("copy to clipboard error");
+            })>"Copy"</button>
         </div>
     }
 }

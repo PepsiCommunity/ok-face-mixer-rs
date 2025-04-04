@@ -11,3 +11,5 @@ console_log = "1.0.0"
 leptos = { version = "0.7.8", features = ["csr"] }
 log = "0.4.27"
 stylers = "0.3.2"
+web-sys = { version = "0.3.77", features = ["Clipboard", "Window", "Navigator", "Permissions"] }
+wasm-bindgen-futures = "0.4.50"
