@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-ok-face-mixer-core = { path = "../ok-face-mixer-core", features = ["query"] }
+ok-face-mixer-core = { path = "../ok-face-mixer-core", features = ["query", "rand"] }
 
 console_error_panic_hook = "0.1.7"
 console_log = "1.0.0"
@@ -13,3 +13,7 @@ log = "0.4.27"
 stylers = "0.3.2"
 web-sys = { version = "0.3.77", features = ["Clipboard", "Window", "Navigator", "Permissions"] }
 wasm-bindgen-futures = "0.4.50"
+rand = "0.9.0"
+getrandom = { version = "0.3.2", features = ["wasm_js"] }
+strum = "0.27.1"
+stringcase = "0.4.0"

@@ -1,3 +1,11 @@
+#[cfg(feature = "rand")]
+use rand::{
+    Rng,
+    distr::{Distribution, StandardUniform},
+};
+#[cfg(feature = "rand")]
+use strum::IntoEnumIterator;
+
 use strum_macros::{Display, EnumIter, EnumString};
 
 #[derive(Debug, PartialEq, Eq, Clone, EnumString, Display, EnumIter)]
@@ -42,12 +50,6 @@ impl Smile {
 #[cfg(feature = "rand")]
 impl Distribution<SmileType> for StandardUniform {
     fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> SmileType {
-        use rand::{
-            Rng,
-            distr::{Distribution, StandardUniform},
-        };
-        use strum::IntoEnumIterator;
-
         SmileType::iter()
             .get(rng.random_range(..SmileType::iter().len()))
             .unwrap()

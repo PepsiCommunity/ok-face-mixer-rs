@@ -3,6 +3,8 @@ use std::str::FromStr;
 use leptos::prelude::*;
 use log::info;
 use ok_face_mixer_core::{Smile, SmileType};
+use stringcase::Caser;
+use strum::IntoEnumIterator;
 use stylers::style_sheet;
 use wasm_bindgen_futures::JsFuture;
 
@@ -27,21 +29,12 @@ fn app() -> impl IntoView {
                     set_smile.set(SmileType::from_str(e.target().value().as_str()).unwrap());
                 }
             >
-                <option value="flush">"Flush"</option>
-                <option value="he">"He"</option>
-                <option value="mad">"Mad"</option>
-                <option value="plead">"Plead"</option>
-                <option value="sad">"Sad"</option>
-                <option value="sg">"Sg"</option>
-                <option value="shock">"Shock"</option>
-                <option value="sl_smile">"Sl Smile"</option>
-                <option value="sleep">"Sleep"</option>
-                <option value="smiley">"Smiley"</option>
-                <option value="tong">"Tong"</option>
-                <option value="unamus">"Unamus"</option>
-                <option value="wink">"Wink"</option>
-                <option value="zany">"Zany"</option>
+                {SmileType::iter().map(|x| view! {<option value=x.to_string()>{x.to_string().as_str().to_pascal_case()}</option>}).collect::<Vec<_>>()}
             </select>
+
+            <button on:click = move |_| {
+                set_smile.set(rand::random());
+            }>"Random smiles"</button>
         }
     };
 
