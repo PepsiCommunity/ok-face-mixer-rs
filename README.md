@@ -18,7 +18,7 @@ GET /api/mix_image.gif?left=<top_part>&right=<bottom_part>
 
 **Available values:**
 ```
-flush, he, mad, plead, sad, sg, shock, sl_smile, sleep, smiley, tong, unamus, wink, zany
+grin, flush, he, mad, plead, sad, sg, shock, sl_smile, sleep, smiley, tong, unamus, wink, zany
 ```
 These values can be used for both the upper (`left`) and lower (`right`) parts of the emote.
 
