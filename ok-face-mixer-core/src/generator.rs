@@ -47,7 +47,7 @@ lazy_static! {
     pub static ref SAD_EYES: SmileElement = SmileElement::new("res/eyes/sad.png", (10, 12));
     pub static ref SAD_MOUTH: SmileElement = SmileElement::new("res/mouth/sad.png", (3, 39));
     pub static ref SG_BROWS: SmileElement = SmileElement::new("res/brows/sg.png", (4, 2));
-    pub static ref SG_EYES: SmileElement = SmileElement::new("res/eyes/sg.png", (8, 11));
+    pub static ref SG_EYES: SmileElement = SmileElement::new("res/eyes/sg.png", (0, 11));
     pub static ref SG_MOUTH: SmileElement = SmileElement::new("res/mouth/sg.png", (4, 44));
     pub static ref SHOCK_BROWS: SmileElement = SmileElement::new("res/brows/shock.png", (7, 3));
     pub static ref SHOCK_EYES: SmileElement = SmileElement::new("res/eyes/shock.png", (5, 9));
